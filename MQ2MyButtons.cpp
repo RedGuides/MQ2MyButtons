@@ -1929,7 +1929,7 @@ PLUGIN_API VOID OnReloadUI()
 PLUGIN_API VOID OnPulse(VOID) 
 { 
 	if (KnightlyMyButtons::boolPluginSuccess){
-		if (gGameState==GAMESTATE_INGAME && KnightlyMyButtons::boolShowWindow && ( !MyBtnWnd || (MyBtnWnd && !(MyBtnWnd->dShow)))) 
+		if (gGameState==GAMESTATE_INGAME && KnightlyMyButtons::boolShowWindow && ( !MyBtnWnd || (MyBtnWnd && !(MyBtnWnd->IsVisible())))) 
 		{    
 			CreateButtonWindow(); 
 			((CXWnd*)MyBtnWnd)->Show(1,1); 
@@ -1980,27 +1980,28 @@ PLUGIN_API VOID ShutdownPlugin(VOID)
 void ReadWindowINI(PCSIDLWND pWindow) 
 { 
    CHAR Buffer[MAX_STRING] = {0};
-   pWindow->Location.top      = GetPrivateProfileInt("Location", "Top", 666, INIFileName);
-   pWindow->Location.bottom   = GetPrivateProfileInt("Location", "Bottom", 718, INIFileName);
-   pWindow->Location.left     = GetPrivateProfileInt("Location", "Left", 18, INIFileName);
-   pWindow->Location.right    = GetPrivateProfileInt("Location", "Right", 531, INIFileName);
-   pWindow->Locked            = GetPrivateProfileInt("UISettings","Locked",         0,INIFileName);
-   pWindow->Fades             = GetPrivateProfileInt("UISettings","Fades",         0,INIFileName); 
-   pWindow->FadeDelay		  = GetPrivateProfileInt("UISettings","Delay",         2000,INIFileName); 
-   pWindow->FadeDuration      = GetPrivateProfileInt("UISettings","Duration",      500,INIFileName); 
-   pWindow->Alpha             = GetPrivateProfileInt("UISettings","Alpha",         255,INIFileName); 
-   pWindow->FadeToAlpha       = GetPrivateProfileInt("UISettings","FadeToAlpha",   255,INIFileName); 
-   pWindow->BGType            = GetPrivateProfileInt("UISettings","BGType",         1,INIFileName); 
+   pWindow->SetLocation({ (LONG)GetPrivateProfileInt("Location", "Left", 18, INIFileName),
+	   (LONG)GetPrivateProfileInt("Location", "Top", 666, INIFileName),
+	   (LONG)GetPrivateProfileInt("Location", "Right", 531, INIFileName),
+	   (LONG)GetPrivateProfileInt("Location", "Bottom", 718, INIFileName) });
+
+   pWindow->SetLocked(GetPrivateProfileInt("UISettings","Locked",         0,INIFileName));
+   pWindow->SetFades(GetPrivateProfileInt("UISettings","Fades",         0,INIFileName)); 
+   pWindow->SetFadeDelay(GetPrivateProfileInt("UISettings","Delay",         2000,INIFileName)); 
+   pWindow->SetFadeDuration(GetPrivateProfileInt("UISettings","Duration",      500,INIFileName)); 
+   pWindow->SetAlpha(GetPrivateProfileInt("UISettings","Alpha",         255,INIFileName)); 
+   pWindow->SetFadeToAlpha(GetPrivateProfileInt("UISettings","FadeToAlpha",   255,INIFileName)); 
+   pWindow->SetBGType(GetPrivateProfileInt("UISettings","BGType",         1,INIFileName)); 
    ARGBCOLOR argb;
    argb.A					  = GetPrivateProfileInt("UISettings","BGTint.alpha",      255,INIFileName); 
    argb.R					  = GetPrivateProfileInt("UISettings","BGTint.red",      255,INIFileName); 
    argb.G					  = GetPrivateProfileInt("UISettings","BGTint.green",      255,INIFileName); 
    argb.B					  = GetPrivateProfileInt("UISettings","BGTint.blue",      255,INIFileName); 
-   pWindow->BGColor			  = argb.ARGB;
+   pWindow->SetBGColor(argb.ARGB);
 
    GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window",Buffer,MAX_STRING,INIFileName); 
    KnightlyMyButtons::boolShowWindow               = 0x00000001 & GetPrivateProfileInt("Settings","ShowWindow",   1,INIFileName);
-   SetCXStr(&pWindow->WindowText,Buffer); 
+   pWindow->CSetWindowText(Buffer); 
    // I am absolutely sure there's a better way to do this, but I'm tired of working on this.
    // and the window won't frickin follow the frame.  I hate XML, I hate UI/UX and I'm done!
    // So...here we're just going to toggle it twice which will move the child window for us 
@@ -2019,17 +2020,17 @@ template <unsigned int _Size>LPSTR SafeItoa(int _Value,char(&_Buffer)[_Size], in
 void WriteWindowINI(PCSIDLWND pWindow) 
 { 
    CHAR szTemp[MAX_STRING] = {0}; 
-   GetCXStr(pWindow->WindowText, szTemp, MAX_STRING);
+   GetCXStr(pWindow->CGetWindowText(), szTemp, MAX_STRING);
    WritePrivateProfileString("UISettings", "WindowTitle", szTemp, INIFileName);
-   WritePrivateProfileString("UISettings","Locked",      SafeItoa(pWindow->Locked,         szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","Fades",      SafeItoa(pWindow->Fades,        szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","Delay",      SafeItoa(pWindow->MouseOver,    szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","Duration",      SafeItoa(pWindow->FadeDuration, szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","Alpha",      SafeItoa(pWindow->Alpha,        szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","FadeToAlpha",  SafeItoa(pWindow->FadeToAlpha,  szTemp,10),INIFileName); 
-   WritePrivateProfileString("UISettings","BGType",      SafeItoa(pWindow->BGType,       szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","Locked",      SafeItoa(pWindow->IsLocked(),         szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","Fades",      SafeItoa(pWindow->GetFades(),        szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","Delay",      SafeItoa(pWindow->GetFadeDelay(),    szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","Duration",      SafeItoa(pWindow->GetFadeDuration(), szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","Alpha",      SafeItoa(pWindow->GetAlpha(),        szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","FadeToAlpha",  SafeItoa(pWindow->GetFadeToAlpha(),  szTemp,10),INIFileName); 
+   WritePrivateProfileString("UISettings","BGType",      SafeItoa(pWindow->GetBGType(),       szTemp,10),INIFileName); 
    ARGBCOLOR argb;
-   argb.ARGB = pWindow->BGColor;
+   argb.ARGB = pWindow->GetBGColor();
    WritePrivateProfileString("UISettings","BGTint.alpha",   SafeItoa(argb.A,    szTemp,10),INIFileName); 
    WritePrivateProfileString("UISettings","BGTint.red",   SafeItoa(argb.R,    szTemp,10),INIFileName); 
    WritePrivateProfileString("UISettings","BGTint.green", SafeItoa(argb.G,    szTemp,10),INIFileName); 
@@ -2037,10 +2038,10 @@ void WriteWindowINI(PCSIDLWND pWindow)
 
    WritePrivateProfileString("UISettings","ShowWindow",   SafeItoa((int)KnightlyMyButtons::boolShowWindow, szTemp,10),INIFileName);
 
-   WritePrivateProfileString("Location", "Top", SafeItoa(pWindow->Location.top, szTemp, 10), INIFileName);
-   WritePrivateProfileString("Location", "Bottom", SafeItoa(pWindow->Location.bottom, szTemp, 10), INIFileName);
-   WritePrivateProfileString("Location", "Left", SafeItoa(pWindow->Location.left, szTemp, 10), INIFileName);
-   WritePrivateProfileString("Location", "Right", SafeItoa(pWindow->Location.right, szTemp, 10), INIFileName);
+   WritePrivateProfileString("Location", "Top", SafeItoa(pWindow->GetLocation().top, szTemp, 10), INIFileName);
+   WritePrivateProfileString("Location", "Bottom", SafeItoa(pWindow->GetLocation().bottom, szTemp, 10), INIFileName);
+   WritePrivateProfileString("Location", "Left", SafeItoa(pWindow->GetLocation().left, szTemp, 10), INIFileName);
+   WritePrivateProfileString("Location", "Right", SafeItoa(pWindow->GetLocation().right, szTemp, 10), INIFileName);
 
    WritePrivateProfileString("Button1", "Label", KnightlyMyButtons::arrMyLabels[1], INIFileName);
    WritePrivateProfileString("Button1", "Command", KnightlyMyButtons::arrMyCommands[1], INIFileName);
