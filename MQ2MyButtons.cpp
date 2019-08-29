@@ -4,13 +4,13 @@
 // and updated it to fix it.  But this is definitely not my code.  So, don't you
 // judge me. https://www.youtube.com/watch?v=8MVpndgU1ic
 
-#include "../MQ2Plugin.h"
+#include "../../MQ2Plugin.h"
 #include <fstream>
 
 // Typically in the header, but Plugins with Multiple Files get stitches.
 void CreateButtonWindow();
 void DestroyButtonWindow();
-void ReadWindowINI(PCSIDLWND pWindow);
+void ReadWindowINI(CSidlScreenWnd* pWindow);
 PLUGIN_API VOID MyButtonsCommand(PSPAWNINFO pSpawn, PCHAR szLine);
 
 PreSetup("MQ2MyButtons");
@@ -1646,8 +1646,6 @@ class CHButWnd : public CCustomWnd
 		  MyButton10 = (CButtonWnd*)GetChildItem("MQMB_Button10");
 		  MyButton11 = (CButtonWnd*)GetChildItem("MQMB_Button11");
 		  MyButton12 = (CButtonWnd*)GetChildItem("MQMB_Button12");
-
-		  SetWndNotification(CHButWnd); 
 	   } 
 	
 	   ~CHButWnd() 
@@ -1853,7 +1851,7 @@ class MQ2MyButtonsType : public MQ2Type {
 			// The Parameter holds the button
 			CHAR szResultParam1[MAX_STRING] = { 0 };
 
-			PMQ2TYPEMEMBER pMember = MQ2MyButtonsType::FindMember(Member);
+			auto pMember = MQ2MyButtonsType::FindMember(Member);
 			if (!pMember) return FALSE;
 
 			switch ((Members)pMember->ID) {
@@ -1977,7 +1975,7 @@ PLUGIN_API VOID ShutdownPlugin(VOID)
 	}
 } 
 
-void ReadWindowINI(PCSIDLWND pWindow) 
+void ReadWindowINI(CSidlScreenWnd* pWindow) 
 { 
    CHAR Buffer[MAX_STRING] = {0};
    pWindow->SetLocation({ (LONG)GetPrivateProfileInt("Location", "Left", 18, INIFileName),
@@ -2001,7 +1999,7 @@ void ReadWindowINI(PCSIDLWND pWindow)
 
    GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window",Buffer,MAX_STRING,INIFileName); 
    KnightlyMyButtons::boolShowWindow               = 0x00000001 & GetPrivateProfileInt("Settings","ShowWindow",   1,INIFileName);
-   pWindow->CSetWindowText(Buffer); 
+   pWindow->SetWindowText(Buffer); 
    // I am absolutely sure there's a better way to do this, but I'm tired of working on this.
    // and the window won't frickin follow the frame.  I hate XML, I hate UI/UX and I'm done!
    // So...here we're just going to toggle it twice which will move the child window for us 
@@ -2017,11 +2015,10 @@ template <unsigned int _Size>LPSTR SafeItoa(int _Value,char(&_Buffer)[_Size], in
 	}
 	return "";
 }
-void WriteWindowINI(PCSIDLWND pWindow) 
+void WriteWindowINI(CSidlScreenWnd* pWindow) 
 { 
    CHAR szTemp[MAX_STRING] = {0}; 
-   GetCXStr(pWindow->CGetWindowText(), szTemp, MAX_STRING);
-   WritePrivateProfileString("UISettings", "WindowTitle", szTemp, INIFileName);
+   WritePrivateProfileString("UISettings", "WindowTitle", pWindow->GetWindowText().c_str(), INIFileName);
    WritePrivateProfileString("UISettings","Locked",      SafeItoa(pWindow->IsLocked(),         szTemp,10),INIFileName); 
    WritePrivateProfileString("UISettings","Fades",      SafeItoa(pWindow->GetFades(),        szTemp,10),INIFileName); 
    WritePrivateProfileString("UISettings","Delay",      SafeItoa(pWindow->GetFadeDelay(),    szTemp,10),INIFileName); 
@@ -2062,8 +2059,8 @@ void CreateButtonWindow()
 		MyBtnWnd = new CHButWnd();
 		if (MyBtnWnd)
 		{
-			ReadWindowINI((PCSIDLWND)MyBtnWnd);
-			WriteWindowINI((PCSIDLWND)MyBtnWnd);
+			ReadWindowINI(MyBtnWnd);
+			WriteWindowINI(MyBtnWnd);
 		}
 	}
 } 
@@ -2074,7 +2071,7 @@ void DestroyButtonWindow()
    DebugSpewAlways("MQ2MyButtons::DestroyButtonWindow()"); 
    if (MyBtnWnd) 
    {
-	  WriteWindowINI((PCSIDLWND)MyBtnWnd); 
+	  WriteWindowINI(MyBtnWnd); 
 	  delete MyBtnWnd; 
 	  MyBtnWnd=0; 
    }
