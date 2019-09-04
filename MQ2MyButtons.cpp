@@ -1846,7 +1846,7 @@ class MQ2MyButtonsType : public MQ2Type {
 			TypeMember(cmd);
 		}
 
-		bool GetMember(MQ2VARPTR VarPtr, char* Member, char* Index, MQ2TYPEVAR &Dest) {
+		bool GetMember(MQVarPtr VarPtr, char* Member, char* Index, MQTypeVar& Dest) {
 			_szBuffer[0] = '\0';
 			// The Parameter holds the button
 			CHAR szResultParam1[MAX_STRING] = { 0 };
@@ -1888,11 +1888,11 @@ class MQ2MyButtonsType : public MQ2Type {
 			return TRUE;
 		}
 
-		bool FromData(MQ2VARPTR &VarPtr, MQ2TYPEVAR &Source) { return FALSE; }
-		bool FromString(MQ2VARPTR &VarPtr, char* Source) { return FALSE; }
+		bool FromData(MQVarPtr& VarPtr, MQTypeVar& Source) { return FALSE; }
+		bool FromString(MQVarPtr& VarPtr, char* Source) { return FALSE; }
 };
 
-BOOL MQ2MyBtnData(PCHAR szIndex, MQ2TYPEVAR &Dest)
+bool MQ2MyBtnData(const char* szIndex, MQTypeVar& Dest)
 {
 	Dest.DWord = 1;
 	Dest.Type = pMyButtonsType;
