@@ -4,7 +4,7 @@
 // and updated it to fix it.  But this is definitely not my code.  So, don't you
 // judge me. https://www.youtube.com/watch?v=8MVpndgU1ic
 
-#include "../../MQ2Plugin.h"
+#include <MQ2Plugin.h>
 #include <fstream>
 
 // Typically in the header, but Plugins with Multiple Files get stitches.
