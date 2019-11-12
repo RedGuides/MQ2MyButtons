@@ -19,7 +19,7 @@ namespace KnightlyMyButtons {
 	bool boolDebug = false;
 	bool boolPluginSuccess = false;
 	bool boolShowWindow = true;
-	std::string xmlVersion = "2018-12-23";
+	std::string xmlVersion = "2019-11-12";//Nov 12th
 	// All of this should be converted into one object, but by the time I realized that it was already written.
 	// And, sure arrays start at zero, but when you're talking about "Button 1" that gets confusing, so one extra won't hurt.
 	char arrMyCommands[13][MAX_STRING] = { 0 };
@@ -71,7 +71,6 @@ namespace KnightlyMyButtons {
 				Message("\ay           \at/mybuttons off");
 				Message("\ay      Reload hotkeys from ini:");
 				Message("\ay           \at/mybuttons reload");
-				Message("\ay           \at/mybuttons reloadcolors \ar(Long - Reloads UI)");
 				Message("\ay      Show buttons configuration:");
 				Message("\ay           \at/mybuttons show");
 				Message("\ay      Use a button:");
@@ -1320,7 +1319,6 @@ namespace KnightlyMyButtons {
 								writePath << "\t</Button>" << std::endl;
 								writePath << "\t<Label item=\"MQMB_Label" + std::to_string(j) + "\">" << std::endl;
 								writePath << "\t\t<ScreenID>MQMB_Label" + std::to_string(j) + "</ScreenID>" << std::endl;
-								writePath << "\t\t<EQType>9999</EQType>" << std::endl;
 								writePath << "\t\t<TooltipReference>${MyButtons.Label[" + std::to_string(j) + "]}</TooltipReference>";
 								writePath << R"KnightlyXMLRtrn(
 		<RelativePosition>true</RelativePosition> 
@@ -1630,120 +1628,65 @@ class CHButWnd;
 CHButWnd *MyBtnWnd = 0;
 class CHButWnd : public CCustomWnd 
 { 
-	public: 
-	   CHButWnd():CCustomWnd("MQMBButtonWnd") 
-	   { 
-		
-		  MyButton1 = (CButtonWnd*)GetChildItem("MQMB_Button1");
-		  MyButton2 = (CButtonWnd*)GetChildItem("MQMB_Button2");
-		  MyButton3 = (CButtonWnd*)GetChildItem("MQMB_Button3");
-		  MyButton4 = (CButtonWnd*)GetChildItem("MQMB_Button4");
-		  MyButton5 = (CButtonWnd*)GetChildItem("MQMB_Button5");
-		  MyButton6 = (CButtonWnd*)GetChildItem("MQMB_Button6");
-		  MyButton7 = (CButtonWnd*)GetChildItem("MQMB_Button7");
-		  MyButton8 = (CButtonWnd*)GetChildItem("MQMB_Button8");
-		  MyButton9 = (CButtonWnd*)GetChildItem("MQMB_Button9");
-		  MyButton10 = (CButtonWnd*)GetChildItem("MQMB_Button10");
-		  MyButton11 = (CButtonWnd*)GetChildItem("MQMB_Button11");
-		  MyButton12 = (CButtonWnd*)GetChildItem("MQMB_Button12");
-
-		  SetWndNotification(CHButWnd); 
-	   } 
+	public:
+		CHButWnd():CCustomWnd("MQMBButtonWnd") 
+		{
+			char buffer[16];
+			for (int i = 1; i <= 12; i++) {
+				sprintf_s(buffer, "MQMB_Button%d", i);
+				MyButton[i] = (CButtonWnd*)GetChildItem(buffer);
+			}
+			SetWndNotification(CHButWnd);
+		}
 	
-	   ~CHButWnd() 
-	   { 
-	   } 
+		~CHButWnd() 
+		{ 
+		}
 
-	   int WndNotification(CXWnd *pWnd, unsigned int Message, void *unknown) 
-	   {    
-			if (pWnd==(CXWnd*)MyButton1) { 
-				if (Message == XWM_LCLICK) {
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "1");
+		int WndNotification(CXWnd *pWnd, unsigned int Message, void *unknown) 
+		{	
+			char buffer[4] = { 0 };
+			for (int i = 1; i <= 12; i++) {
+				if (pWnd == (CXWnd*)MyButton[i]) {
+					sprintf_s(buffer, "%d", i);
+					if (Message == XWM_LCLICK) {
+						MyButtonsCommand((PSPAWNINFO)pCharSpawn, buffer);
+						break;
+					}
+					else {
+						DebugSpew("MyButton%s message %Xh / %d", buffer, Message, Message);
+						break;
+					}
+					
 				}
-				else {
-				   DebugSpew("MyButton1 message %Xh / %d",Message,Message); 
-				}
-			} 
-			else if (pWnd==(CXWnd*)MyButton2) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "2");
-				else
-				   DebugSpew("MyButton2 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton3) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "3");
-				else
-				   DebugSpew("MyButton3 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton4) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "4");
-				else
-				   DebugSpew("MyButton4 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton5) { 
-				if (Message==XWM_LCLICK)
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "5");
-				else
-				   DebugSpew("MyButton5 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton6) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "6");
-				else
-				   DebugSpew("MyButton6 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton7) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "7");
-				else
-				   DebugSpew("MyButton7 message %Xh / %d",Message,Message); 
-			}
-			else if (pWnd == (CXWnd*)MyButton8) {
-				if (Message == XWM_LCLICK)
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "8");
-				else
-					DebugSpew("MyButton8 message %Xh / %d", Message, Message);
-			}
-			else if (pWnd==(CXWnd*)MyButton9) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "9");
-				else
-				   DebugSpew("MyButton9 message %Xh / %d",Message,Message); 
-			} 
-			else if (pWnd==(CXWnd*)MyButton10) { 
-				if (Message==XWM_LCLICK) 
-					MyButtonsCommand((PSPAWNINFO)pCharSpawn, "10");
-				else
-				   DebugSpew("MyButton10 message %Xh / %d",Message,Message); 
-			}
-			else if (pWnd == (CXWnd*)MyButton11) {
-			  if (Message == XWM_LCLICK)
-				  MyButtonsCommand((PSPAWNINFO)pCharSpawn, "11");
-			  else
-				  DebugSpew("MyButton11 message %Xh / %d", Message, Message);
-			}
-			else if (pWnd == (CXWnd*)MyButton12) {
-			  if (Message == XWM_LCLICK)
-				  MyButtonsCommand((PSPAWNINFO)pCharSpawn, "12");
-			  else
-				  DebugSpew("MyButton12 message %Xh / %d", Message, Message);
 			}
 			return 0;
-	   }; 
-	CButtonWnd *MyButton1; 
-	CButtonWnd *MyButton2; 
-	CButtonWnd *MyButton3; 
-	CButtonWnd *MyButton4; 
-	CButtonWnd *MyButton5; 
-	CButtonWnd *MyButton6; 
-	CButtonWnd *MyButton7; 
-	CButtonWnd *MyButton8; 
-	CButtonWnd *MyButton9; 
-	CButtonWnd *MyButton10; 
-	CButtonWnd *MyButton11;
-	CButtonWnd *MyButton12;
+		}
+		
+		void SetLabelsAndColors() {
+			//lets set the label on the move instead of depending on MQ2Labels doing it.
+			char labelname[16] = { 0 };
+			int r = 0;
+			int g = 0;
+			int b = 0;
+			ARGBCOLOR buttonColor;
+			for (int i = 1; i <= 12; i++) {
+				sprintf_s(labelname, "MQMB_Label%i", i);
+				if (MyBtnWnd->GetChildItem(labelname)) {
+					//Set the label.
+					if (KnightlyMyButtons::arrMyLabels[i][0] != 0) MyBtnWnd->GetChildItem(labelname)->CSetWindowText(KnightlyMyButtons::arrMyLabels[i]);
+					//Can we convert the color from RGB to ARGB in hex to set the color without a reload? Yes we can! Lets set those colors on the fly.
+					r = atoi(KnightlyMyButtons::arrMyColors[i][0]);
+					g = atoi(KnightlyMyButtons::arrMyColors[i][1]);
+					b = atoi(KnightlyMyButtons::arrMyColors[i][2]);
+					buttonColor.ARGB = 0xFF000000 | (r << 16) | (g << 8) | (b);
+					MyBtnWnd->GetChildItem(labelname)->SetCRNormal(buttonColor.ARGB);
+				}
+				//Tooltip of the button?.
+				if (MyButton[i] && KnightlyMyButtons::arrMyCommands[i]) MyButton[i]->SetTooltip(KnightlyMyButtons::arrMyCommands[i]);
+			}
+		};
+		CButtonWnd* MyButton[13];
 };
 
 PLUGIN_API VOID MyButtonsCommand(PSPAWNINFO pSpawn, PCHAR szLine)
@@ -1767,28 +1710,12 @@ PLUGIN_API VOID MyButtonsCommand(PSPAWNINFO pSpawn, PCHAR szLine)
 	else if (szParam1 && !strcmp(szParam1, "off")) {
 		WindowToggle = (KnightlyMyButtons::boolShowWindow ? true : false);
 	}
-	// Otherwise if the first parameter is "reloadcolors"
-	else if (szParam1 && !strcmp(szParam1, "reloadcolors")) {
-		KnightlyMyButtons::Log::Message("Reloading hotkeys from INI...");
-		if (KnightlyMyButtons::File::LoadButtonData()) {
-			KnightlyMyButtons::Log::Message("Resetting button colors...");
-			if (KnightlyMyButtons::File::CheckAndCreateXMLFile("MQUI_MyButtonsWnd.xml", true)) {
-				KnightlyMyButtons::Log::Message("Reloading user interface...");
-				DoCommand((PSPAWNINFO)pCharSpawn, "/loadskin ${EverQuest.CurrentUI}");
-				KnightlyMyButtons::Log::Message("...Done");
-			}
-			else {
-				KnightlyMyButtons::Log::Error("...Failed");
-			}
-		}
-		else {
-			KnightlyMyButtons::Log::Error("...Failed");
-		}
-	}
-	// Otherwise if the first parameter is "reload"
 	else if (szParam1 && !strcmp(szParam1, "reload")) {
-		KnightlyMyButtons::Log::Message("Reloading hotkeys from INI (does not include colors)...");
+		KnightlyMyButtons::Log::Message("Reloading hotkeys from INI (now includes colors)...");
 		if (KnightlyMyButtons::File::LoadButtonData()) {
+			if (MyBtnWnd) {
+				MyBtnWnd->SetLabelsAndColors();
+			}
 			KnightlyMyButtons::Log::Message("...Success");
 		}
 		else {
@@ -2042,12 +1969,17 @@ void WriteWindowINI(PCSIDLWND pWindow)
    WritePrivateProfileString("Location", "Bottom", SafeItoa(pWindow->GetLocation().bottom, szTemp, 10), INIFileName);
    WritePrivateProfileString("Location", "Left", SafeItoa(pWindow->GetLocation().left, szTemp, 10), INIFileName);
    WritePrivateProfileString("Location", "Right", SafeItoa(pWindow->GetLocation().right, szTemp, 10), INIFileName);
-
-   WritePrivateProfileString("Button1", "Label", KnightlyMyButtons::arrMyLabels[1], INIFileName);
-   WritePrivateProfileString("Button1", "Command", KnightlyMyButtons::arrMyCommands[1], INIFileName);
-   WritePrivateProfileString("Button1", "Red", KnightlyMyButtons::arrMyColors[1][0], INIFileName);
-   WritePrivateProfileString("Button1", "Green", KnightlyMyButtons::arrMyColors[1][1], INIFileName);
-   WritePrivateProfileString("Button1", "Blue", KnightlyMyButtons::arrMyColors[1][2], INIFileName);
+   
+   //Lets create a template for all the buttons instead of just one.
+   char buffer[10] = { 0 };
+   for (int i = 1; i <= 12; i++) {
+	   sprintf_s(buffer, "Button%d", i);
+	   WritePrivateProfileString(buffer, "Label", KnightlyMyButtons::arrMyLabels[i], INIFileName);
+	   WritePrivateProfileString(buffer, "Command", KnightlyMyButtons::arrMyCommands[i], INIFileName);
+	   WritePrivateProfileString(buffer, "Red", KnightlyMyButtons::arrMyColors[i][0], INIFileName);
+	   WritePrivateProfileString(buffer, "Green", KnightlyMyButtons::arrMyColors[i][1], INIFileName);
+	   WritePrivateProfileString(buffer, "Blue", KnightlyMyButtons::arrMyColors[i][2], INIFileName);
+   }
 }
 
 
@@ -2063,6 +1995,7 @@ void CreateButtonWindow()
 		if (MyBtnWnd)
 		{
 			ReadWindowINI((PCSIDLWND)MyBtnWnd);
+			MyBtnWnd->SetLabelsAndColors();
 			WriteWindowINI((PCSIDLWND)MyBtnWnd);
 		}
 	}
