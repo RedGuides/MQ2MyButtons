@@ -1807,7 +1807,7 @@ class MQ2MyButtonsType : public MQ2Type {
 						return false;
 				}
 			}
-			Dest.Type = pStringType;
+			Dest.Type = mq::datatypes::pStringType;
 			Dest.Ptr = &_szBuffer[0];
 			return true;
 		}
@@ -1853,15 +1853,17 @@ PLUGIN_API VOID OnPulse(VOID)
 	if (KnightlyMyButtons::boolPluginSuccess){
 		if (gGameState==GAMESTATE_INGAME && KnightlyMyButtons::boolShowWindow && ( !MyBtnWnd || (MyBtnWnd && !(MyBtnWnd->IsVisible())))) 
 		{    
-			CreateButtonWindow(); 
-			((CXWnd*)MyBtnWnd)->Show(1,1); 
+			CreateButtonWindow();
+			if (MyBtnWnd) {
+				((CXWnd*)MyBtnWnd)->Show(1,1);
+			}
 		} 
 	   
-		if ( gGameState==GAMESTATE_INGAME && !KnightlyMyButtons::boolShowWindow ) 
+		if ( gGameState==GAMESTATE_INGAME && !KnightlyMyButtons::boolShowWindow )
 		{ 
-			CreateButtonWindow(); 
-			((CXWnd*)MyBtnWnd)->Show(0,0); 
-		} 
+			CreateButtonWindow();
+			((CXWnd*)MyBtnWnd)->Show(0,0);
+		}
 	}
 } 
 
