@@ -137,9 +137,7 @@ namespace KnightlyMyButtons {
 						// If we have a write handle (ie, we can write to it)...
 						if (writePath) {
 							if (strFileName == "MQUI_MyButtonsWnd.xml") {
-								// Yeah, I know doing it this way is silly, versus just including it as a resource
-								// but until the Online Builder lets me update my own dependency folders, this is the
-								// lesser of two evils.  Or if not the lesser, certainly the more convenient.
+								// TODO: Make this a resource
 								writePath << "<!-- MyButtons UI File Version:  " + xmlVersion + " -->";
 
 								writePath << R"KnightlyXMLRtrn(
@@ -1324,34 +1322,34 @@ namespace KnightlyMyButtons {
 									writePath << "\t\t<ScreenID>MQMB_Label" + std::to_string(j) + "</ScreenID>" << std::endl;
 									writePath << "\t\t<TooltipReference>${MyButtons.Label[" + std::to_string(j) + "]}</TooltipReference>";
 									writePath << R"KnightlyXMLRtrn(
-			<RelativePosition>true</RelativePosition> 
-			<Location> 
-				<X>0</X> 
-				<Y>5</Y> 
-			</Location> 
-			<Size> 
-				<CX>37</CX> 
-				<CY>34</CY> 
-			</Size> 
+			<RelativePosition>true</RelativePosition>
+			<Location>
+				<X>0</X>
+				<Y>5</Y>
+			</Location>
+			<Size>
+				<CX>37</CX>
+				<CY>34</CY>
+			</Size>
 			<Text></Text>
-			<Font>1</Font> 
+			<Font>1</Font>
 			<TextColor>
 	<!-- Break for Color Inserts -->)KnightlyXMLRtrn";
 									writePath << std::endl << "\t\t\t<R>" << KnightlyMyButtons::arrMyColors[j][0] << "</R>" << std::endl;
 									writePath << "\t\t\t<G>" << KnightlyMyButtons::arrMyColors[j][1] << "</G>" << std::endl;
 									writePath << "\t\t\t<B>" << KnightlyMyButtons::arrMyColors[j][2] << "</B>";
 									writePath << R"KnightlyXMLRtrn(
-	<!-- End Break for Color Inserts --> 
-			</TextColor> 
-			<NoWrap>false</NoWrap> 
-			<AlignCenter>true</AlignCenter> 
-			<AlignRight>false</AlignRight> 
+	<!-- End Break for Color Inserts -->
+			</TextColor>
+			<NoWrap>false</NoWrap>
+			<AlignCenter>true</AlignCenter>
+			<AlignRight>false</AlignRight>
 			<Style_Transparent>true</Style_Transparent>
 			<Style_TransparentControl>true</Style_TransparentControl>
 		</Label>)KnightlyXMLRtrn";
 									writePath << std::endl << "\t<LayoutBox item=\"MQMB_LayoutB" + std::to_string(j) + "\">" << std::endl;
 									writePath << "\t\t<ScreenID>MQMB_LayoutB" + std::to_string(j) + "</ScreenID>";
-									writePath << R"KnightlyXMLRtrn(		
+									writePath << R"KnightlyXMLRtrn(
 			<RelativePosition>true</RelativePosition>
 			<Size>
 				<CX>37</CX>
@@ -1373,7 +1371,7 @@ namespace KnightlyMyButtons {
 			<TopAnchorOffset>4</TopAnchorOffset>
 			<BottomAnchorOffset>4</BottomAnchorOffset>
 			<LeftAnchorOffset>4</LeftAnchorOffset>
-			<RightAnchorOffset>4</RightAnchorOffset>	
+			<RightAnchorOffset>4</RightAnchorOffset>
 			<TopAnchorToTop>true</TopAnchorToTop>
 			<BottomAnchorToTop>false</BottomAnchorToTop>
 			<LeftAnchorToLeft>true</LeftAnchorToLeft>
@@ -1388,7 +1386,7 @@ namespace KnightlyMyButtons {
 			<TopAnchorOffset>4</TopAnchorOffset>
 			<BottomAnchorOffset>4</BottomAnchorOffset>
 			<LeftAnchorOffset>4</LeftAnchorOffset>
-			<RightAnchorOffset>15</RightAnchorOffset>	
+			<RightAnchorOffset>15</RightAnchorOffset>
 			<TopAnchorToTop>true</TopAnchorToTop>
 			<BottomAnchorToTop>false</BottomAnchorToTop>
 			<LeftAnchorToLeft>true</LeftAnchorToLeft>
@@ -1403,7 +1401,7 @@ namespace KnightlyMyButtons {
 			<TopAnchorOffset>15</TopAnchorOffset>
 			<BottomAnchorOffset>4</BottomAnchorOffset>
 			<LeftAnchorOffset>4</LeftAnchorOffset>
-			<RightAnchorOffset>4</RightAnchorOffset>	
+			<RightAnchorOffset>4</RightAnchorOffset>
 			<TopAnchorToTop>true</TopAnchorToTop>
 			<BottomAnchorToTop>false</BottomAnchorToTop>
 			<LeftAnchorToLeft>true</LeftAnchorToLeft>
@@ -1418,7 +1416,7 @@ namespace KnightlyMyButtons {
 			<TopAnchorOffset>4</TopAnchorOffset>
 			<BottomAnchorOffset>4</BottomAnchorOffset>
 			<LeftAnchorOffset>4</LeftAnchorOffset>
-			<RightAnchorOffset>11</RightAnchorOffset>	
+			<RightAnchorOffset>11</RightAnchorOffset>
 			<TopAnchorToTop>true</TopAnchorToTop>
 			<BottomAnchorToTop>false</BottomAnchorToTop>
 			<LeftAnchorToLeft>true</LeftAnchorToLeft>
@@ -1526,7 +1524,7 @@ namespace KnightlyMyButtons {
 			<TopAnchorOffset>0</TopAnchorOffset>
 			<BottomAnchorOffset>43</BottomAnchorOffset>
 			<LeftAnchorOffset>11</LeftAnchorOffset>
-			<RightAnchorOffset>0</RightAnchorOffset>	
+			<RightAnchorOffset>0</RightAnchorOffset>
 			<TopAnchorToTop>true</TopAnchorToTop>
 			<BottomAnchorToTop>true</BottomAnchorToTop>
 			<LeftAnchorToLeft>false</LeftAnchorToLeft>
@@ -1630,22 +1628,22 @@ namespace KnightlyMyButtons {
 
 class CHButWnd;
 CHButWnd *MyBtnWnd = 0;
-class CHButWnd : public CCustomWnd 
-{ 
+class CHButWnd : public CCustomWnd
+{
 	public:
 		// FIXME:  This needs to be dynamic and initialized
 		CButtonWnd* MyButton[13];
 
-		CHButWnd() : CCustomWnd("MQMBButtonWnd") 
+		CHButWnd() : CCustomWnd("MQMBButtonWnd")
 		{
 			for (int i = 1; i <= KnightlyMyButtons::iMaxButtons; ++i) {
 				const std::string strButton = "MQMB_Button" + std::to_string(i);
 				MyButton[i] = (CButtonWnd*)GetChildItem(strButton.c_str());
 			}
 		}
-	
-		~CHButWnd() 
-		{ 
+
+		~CHButWnd()
+		{
 		}
 
 		// FIXME:  This seems inefficient and will only get worse as the amount of buttons increases
@@ -1663,12 +1661,11 @@ class CHButWnd : public CCustomWnd
 						DebugSpew("MyButton%s message %Xh / %d", i, Message, Message);
 						break;
 					}
-					
 				}
 			}
 			return 0;
 		}
-		
+
 		void SetLabelsAndColors() {
 			ARGBCOLOR buttonColor;
 			for (int i = 1; i <= KnightlyMyButtons::iMaxButtons; ++i) {
@@ -1782,7 +1779,7 @@ class MQ2MyButtonsType : public MQ2Type {
 
 		bool GetMember(MQVarPtr VarPtr, char* Member, char* Index, MQTypeVar& Dest) {
 			_szBuffer[0] = '\0';
-			
+
 			auto pMember = MQ2MyButtonsType::FindMember(Member);
 			if (!pMember) return false;
 
@@ -1792,7 +1789,7 @@ class MQ2MyButtonsType : public MQ2Type {
 				strcpy_s(_szBuffer, "InvalidButton");
 			}
 			else
-			{			
+			{
 				switch ((Members)pMember->ID) {
 					case Label:
 					case label:
@@ -1823,15 +1820,15 @@ bool MQ2MyBtnData(const char* szIndex, MQTypeVar& Dest)
 	return true;
 }
 
-PLUGIN_API VOID OnCleanUI(VOID) 
+PLUGIN_API VOID OnCleanUI(VOID)
 {
 	if (KnightlyMyButtons::boolPluginSuccess) {
 		DestroyButtonWindow();
 	}
-} 
+}
 
-PLUGIN_API VOID SetGameState(DWORD GameState) 
-{ 
+PLUGIN_API VOID SetGameState(DWORD GameState)
+{
 	if (KnightlyMyButtons::boolPluginSuccess) {
 		if (GameState == GAMESTATE_INGAME && !MyBtnWnd)
 		{
@@ -1839,37 +1836,37 @@ PLUGIN_API VOID SetGameState(DWORD GameState)
 				CreateButtonWindow();
 		}
 	}
-} 
+}
 
-PLUGIN_API VOID OnReloadUI() 
-{ 
+PLUGIN_API VOID OnReloadUI()
+{
 	if (KnightlyMyButtons::boolPluginSuccess && gGameState == GAMESTATE_INGAME && pCharSpawn) {
 		CreateButtonWindow();
 	}
-} 
+}
 
-PLUGIN_API VOID OnPulse(VOID) 
-{ 
+PLUGIN_API VOID OnPulse(VOID)
+{
 	if (KnightlyMyButtons::boolPluginSuccess){
-		if (gGameState==GAMESTATE_INGAME && KnightlyMyButtons::boolShowWindow && ( !MyBtnWnd || (MyBtnWnd && !(MyBtnWnd->IsVisible())))) 
-		{    
+		if (gGameState==GAMESTATE_INGAME && KnightlyMyButtons::boolShowWindow && ( !MyBtnWnd || (MyBtnWnd && !(MyBtnWnd->IsVisible()))))
+		{
 			CreateButtonWindow();
 			if (MyBtnWnd) {
 				((CXWnd*)MyBtnWnd)->Show(1,1);
 			}
-		} 
-	   
+		}
+
 		if ( gGameState==GAMESTATE_INGAME && !KnightlyMyButtons::boolShowWindow )
-		{ 
+		{
 			CreateButtonWindow();
 			((CXWnd*)MyBtnWnd)->Show(0,0);
 		}
 	}
-} 
+}
 
 
-PLUGIN_API VOID InitializePlugin(VOID) 
-{ 
+PLUGIN_API VOID InitializePlugin(VOID)
+{
    DebugSpewAlways("Initializing MQ2MyButtons");
    if (KnightlyMyButtons::File::LoadButtonData()) {
 	   if (KnightlyMyButtons::File::CheckAndCreateXMLFile("MQUI_MyButtonsWnd.xml")) {
@@ -1886,12 +1883,12 @@ PLUGIN_API VOID InitializePlugin(VOID)
    else {
 	   KnightlyMyButtons::Log::Error("Could not load INI. Plugin should be unloaded.");
    }
-} 
+}
 
-// Called once, when the plugin is to shutdown 
-PLUGIN_API VOID ShutdownPlugin(VOID) 
-{ 
-	DebugSpewAlways("Shutting down MQ2MyButtons"); 
+// Called once, when the plugin is to shutdown
+PLUGIN_API VOID ShutdownPlugin(VOID)
+{
+	DebugSpewAlways("Shutting down MQ2MyButtons");
 	if (KnightlyMyButtons::boolPluginSuccess) {
 		DestroyButtonWindow();
 		RemoveCommand("/mybuttons");
@@ -1899,10 +1896,10 @@ PLUGIN_API VOID ShutdownPlugin(VOID)
 		RemoveXMLFile("MQUI_MyButtonsWnd.xml");
 		delete pMyButtonsType;
 	}
-} 
+}
 
 void ReadWindowINI(CSidlScreenWnd* pWindow)
-{ 
+{
    CHAR Buffer[MAX_STRING] = {0};
    pWindow->SetLocation({ (LONG)GetPrivateProfileInt("Location", "Left", 18, INIFileName),
 	   (LONG)GetPrivateProfileInt("Location", "Top", 666, INIFileName),
@@ -1910,32 +1907,32 @@ void ReadWindowINI(CSidlScreenWnd* pWindow)
 	   (LONG)GetPrivateProfileInt("Location", "Bottom", 718, INIFileName) });
 
    pWindow->SetLocked(GetPrivateProfileInt("UISettings","Locked",         0,INIFileName));
-   pWindow->SetFades(GetPrivateProfileInt("UISettings","Fades",         0,INIFileName)); 
-   pWindow->SetFadeDelay(GetPrivateProfileInt("UISettings","Delay",         2000,INIFileName)); 
-   pWindow->SetFadeDuration(GetPrivateProfileInt("UISettings","Duration",      500,INIFileName)); 
-   pWindow->SetAlpha(GetPrivateProfileInt("UISettings","Alpha",         255,INIFileName)); 
-   pWindow->SetFadeToAlpha(GetPrivateProfileInt("UISettings","FadeToAlpha",   255,INIFileName)); 
-   pWindow->SetBGType(GetPrivateProfileInt("UISettings","BGType",         1,INIFileName)); 
+   pWindow->SetFades(GetPrivateProfileInt("UISettings","Fades",         0,INIFileName));
+   pWindow->SetFadeDelay(GetPrivateProfileInt("UISettings","Delay",         2000,INIFileName));
+   pWindow->SetFadeDuration(GetPrivateProfileInt("UISettings","Duration",      500,INIFileName));
+   pWindow->SetAlpha(GetPrivateProfileInt("UISettings","Alpha",         255,INIFileName));
+   pWindow->SetFadeToAlpha(GetPrivateProfileInt("UISettings","FadeToAlpha",   255,INIFileName));
+   pWindow->SetBGType(GetPrivateProfileInt("UISettings","BGType",         1,INIFileName));
    ARGBCOLOR argb;
-   argb.A					  = GetPrivateProfileInt("UISettings","BGTint.alpha",      255,INIFileName); 
-   argb.R					  = GetPrivateProfileInt("UISettings","BGTint.red",      255,INIFileName); 
-   argb.G					  = GetPrivateProfileInt("UISettings","BGTint.green",      255,INIFileName); 
-   argb.B					  = GetPrivateProfileInt("UISettings","BGTint.blue",      255,INIFileName); 
+   argb.A					  = GetPrivateProfileInt("UISettings","BGTint.alpha",      255,INIFileName);
+   argb.R					  = GetPrivateProfileInt("UISettings","BGTint.red",      255,INIFileName);
+   argb.G					  = GetPrivateProfileInt("UISettings","BGTint.green",      255,INIFileName);
+   argb.B					  = GetPrivateProfileInt("UISettings","BGTint.blue",      255,INIFileName);
    pWindow->SetBGColor(argb.ARGB);
 
-   GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window",Buffer,MAX_STRING,INIFileName); 
+   GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window",Buffer,MAX_STRING,INIFileName);
    KnightlyMyButtons::boolShowWindow               = 0x00000001 & GetPrivateProfileInt("Settings","ShowWindow",   1,INIFileName);
-   pWindow->SetWindowText(Buffer); 
+   pWindow->SetWindowText(Buffer);
    // I am absolutely sure there's a better way to do this, but I'm tired of working on this.
    // and the window won't frickin follow the frame.  I hate XML, I hate UI/UX and I'm done!
-   // So...here we're just going to toggle it twice which will move the child window for us 
+   // So...here we're just going to toggle it twice which will move the child window for us
    // and leave it off or on as the user had it :p
    MyButtonsCommand((SPAWNINFO*)pCharSpawn, "");
    MyButtonsCommand((SPAWNINFO*)pCharSpawn, "");
-} 
+}
 
-void WriteWindowINI(CSidlScreenWnd* pWindow) 
-{ 
+void WriteWindowINI(CSidlScreenWnd* pWindow)
+{
    WritePrivateProfileString("UISettings", "WindowTitle", pWindow->GetWindowText().c_str(), INIFileName);
    WritePrivateProfileString("UISettings", "Locked", std::to_string(pWindow->IsLocked()), INIFileName);
    WritePrivateProfileString("UISettings", "Fades", std::to_string(pWindow->GetFades()), INIFileName);
@@ -1966,8 +1963,8 @@ void WriteWindowINI(CSidlScreenWnd* pWindow)
 }
 
 
-void CreateButtonWindow() 
-{ 
+void CreateButtonWindow()
+{
 	DebugSpew("MQ2MyButtons::CreateButtonWindow()");
 	if (MyBtnWnd)
 	{
@@ -1982,16 +1979,16 @@ void CreateButtonWindow()
 			WriteWindowINI(MyBtnWnd);
 		}
 	}
-} 
+}
 
 
-void DestroyButtonWindow() 
-{ 
-   DebugSpewAlways("MQ2MyButtons::DestroyButtonWindow()"); 
-   if (MyBtnWnd) 
+void DestroyButtonWindow()
+{
+   DebugSpewAlways("MQ2MyButtons::DestroyButtonWindow()");
+   if (MyBtnWnd)
    {
-	  WriteWindowINI(MyBtnWnd); 
-	  delete MyBtnWnd; 
-	  MyBtnWnd=0; 
+	  WriteWindowINI(MyBtnWnd);
+	  delete MyBtnWnd;
+	  MyBtnWnd=0;
    }
-} 
+}
