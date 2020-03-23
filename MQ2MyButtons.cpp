@@ -10,6 +10,7 @@
 #include <fstream>
 
 PreSetup("MQ2MyButtons");
+PLUGIN_VERSION(2020.0127);
 
 // Typically in the header, but Plugins with Multiple Files get stitches.
 void CreateButtonWindow();
