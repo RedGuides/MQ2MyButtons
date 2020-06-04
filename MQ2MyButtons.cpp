@@ -10,7 +10,7 @@
 #include <fstream>
 
 PreSetup("MQ2MyButtons");
-PLUGIN_VERSION(2020.0127);
+PLUGIN_VERSION(2020.0604);
 
 PLUGIN_API void MyButtonsCommand(SPAWNINFO* pSpawn, char* szLine);
 
