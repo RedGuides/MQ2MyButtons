@@ -1770,7 +1770,7 @@ class MQ2MyButtonsType : public MQ2Type {
 			AddMember(CMD, "Cmd");
 		}
 
-		bool GetMember(MQVarPtr VarPtr, char* Member, char* Index, MQTypeVar& Dest) {
+		virtual bool GetMember(MQVarPtr VarPtr, const char* Member, char* Index, MQTypeVar& Dest) override {
 			_szBuffer[0] = '\0';
 
 			auto pMember = MQ2MyButtonsType::FindMember(Member);
@@ -1800,31 +1800,36 @@ class MQ2MyButtonsType : public MQ2Type {
 		}
 
 		bool FromData(MQVarPtr& VarPtr, MQTypeVar& Source) { return false; }
-		bool FromString(MQVarPtr& VarPtr, char* Source) { return false; }
+		virtual bool FromString(MQVarPtr& VarPtr, const char* Source) override { return false; }
 };
 
 void ReadWindowINI(CSidlScreenWnd* pWindow)
 {
-   pWindow->SetLocation({ GetPrivateProfileInt("Location", "Left", 18, INIFileName),
-	   GetPrivateProfileInt("Location", "Top", 666, INIFileName),
-	   GetPrivateProfileInt("Location", "Right", 531, INIFileName),
-	   GetPrivateProfileInt("Location", "Bottom", 718, INIFileName) });
-   pWindow->SetLocked(GetPrivateProfileBool("UISettings", "Locked", false, INIFileName));
-   pWindow->SetFades(GetPrivateProfileBool("UISettings", "Fades", false, INIFileName));
-   pWindow->SetFadeDelay(GetPrivateProfileInt("UISettings", "Delay", 2000, INIFileName));
-   pWindow->SetFadeDuration(GetPrivateProfileInt("UISettings", "Duration", 500, INIFileName));
-   pWindow->SetAlpha(GetPrivateProfileInt("UISettings", "Alpha", 255, INIFileName));
-   pWindow->SetFadeToAlpha(GetPrivateProfileInt("UISettings", "FadeToAlpha", 255, INIFileName));
-   pWindow->SetBGType(GetPrivateProfileInt("UISettings", "BGType", 1,INIFileName));
-   ARGBCOLOR argb{};
-   argb.A = GetPrivateProfileInt("UISettings","BGTint.alpha",      255,INIFileName);
-   argb.R = GetPrivateProfileInt("UISettings","BGTint.red",      255,INIFileName);
-   argb.G = GetPrivateProfileInt("UISettings","BGTint.green",      255,INIFileName);
-   argb.B = GetPrivateProfileInt("UISettings","BGTint.blue",      255,INIFileName);
-   pWindow->SetBGColor(argb.ARGB);
-   pWindow->SetWindowText(&GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window", INIFileName)[0]);
-   pWindow->Show(GetPrivateProfileBool("UISettings", "ShowWindow", true, INIFileName));
-   pWindow->UpdateLayout();
+	pWindow->SetLocation({ GetPrivateProfileInt("Location", "Left", 18, INIFileName),
+	                       GetPrivateProfileInt("Location", "Top", 666, INIFileName),
+	                       GetPrivateProfileInt("Location", "Right", 531, INIFileName),
+	                       GetPrivateProfileInt("Location", "Bottom", 718, INIFileName) });
+	pWindow->SetLocked(GetPrivateProfileBool("UISettings", "Locked", false, INIFileName));
+	pWindow->SetFades(GetPrivateProfileBool("UISettings", "Fades", false, INIFileName));
+	pWindow->SetFadeDelay(GetPrivateProfileInt("UISettings", "Delay", 2000, INIFileName));
+	pWindow->SetFadeDuration(GetPrivateProfileInt("UISettings", "Duration", 500, INIFileName));
+	pWindow->SetAlpha(GetPrivateProfileInt("UISettings", "Alpha", 255, INIFileName));
+	pWindow->SetFadeToAlpha(GetPrivateProfileInt("UISettings", "FadeToAlpha", 255, INIFileName));
+	pWindow->SetBGType(GetPrivateProfileInt("UISettings", "BGType", 1,INIFileName));
+	ARGBCOLOR argb{};
+	argb.A = GetPrivateProfileInt("UISettings","BGTint.alpha",      255,INIFileName);
+	argb.R = GetPrivateProfileInt("UISettings","BGTint.red",      255,INIFileName);
+	argb.G = GetPrivateProfileInt("UISettings","BGTint.green",      255,INIFileName);
+	argb.B = GetPrivateProfileInt("UISettings","BGTint.blue",      255,INIFileName);
+	pWindow->SetBGColor(argb.ARGB);
+	pWindow->SetWindowText(&GetPrivateProfileString("UISettings","WindowTitle","MQ2 MyButton Window", INIFileName)[0]);
+	pWindow->Show(GetPrivateProfileBool("UISettings", "ShowWindow", true, INIFileName));
+	pWindow->UpdateLayout();
+	if (pWindow->bFullyScreenClipped)
+	{
+		WriteChatf("Mybuttons is off screen.");
+	}
+	
 }
 
 void WriteWindowINI(CSidlScreenWnd* pWindow)
