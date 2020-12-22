@@ -100,8 +100,9 @@ namespace KnightlyMyButtons {
 				// Assume something went wrong~
 				bool returnResult = false;
 				std::filesystem::path pathXMLFile = gPathResources / std::filesystem::path("uifiles\\default\\") / strFileName;
+				std::error_code ec_fs;
 				// Check if the file already exists
-				if (!std::filesystem::exists(pathXMLFile)) {
+				if (!std::filesystem::exists(pathXMLFile, ec_fs)) {
 					// File doesn't exist
 					createFile = true;
 				}
@@ -126,7 +127,7 @@ namespace KnightlyMyButtons {
 				// If we should create the file
 				if (createFile) {
 					// If the parent folder exists or can be created
-					if (std::filesystem::exists(pathXMLFile.parent_path()) || std::filesystem::create_directories(pathXMLFile.parent_path())) {
+					if (std::filesystem::exists(pathXMLFile.parent_path(), ec_fs) || std::filesystem::create_directories(pathXMLFile.parent_path(), ec_fs)) {
 						// Open the file for writing
 						std::ofstream writePath(pathXMLFile);
 						// If we have a write handle (ie, we can write to it)...
