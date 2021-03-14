@@ -1753,55 +1753,49 @@ PLUGIN_API void MyButtonsCommand(SPAWNINFO* pSpawn, char* szLine)
 
 
 class MQ2MyButtonsType *pMyButtonsType = nullptr;
-class MQ2MyButtonsType : public MQ2Type {
-	private:
-		CHAR _szBuffer[MAX_STRING] = { 0 };
-	public:
-		enum Members {
-			Label,
-			CMD
-		};
+class MQ2MyButtonsType : public MQ2Type
+{
+public:
+	enum Members {
+		Label,
+		CMD
+	};
 
-		MQ2MyButtonsType() : MQ2Type("MyButtons") {
-			TypeMember(Label);
-			AddMember(Label, "label");
+	MQ2MyButtonsType() : MQ2Type("MyButtons") {
+		TypeMember(Label);
+		AddMember(Label, "label");
 
-			TypeMember(CMD);
-			AddMember(CMD, "cmd");
-			AddMember(CMD, "Cmd");
+		TypeMember(CMD);
+		AddMember(CMD, "cmd");
+		AddMember(CMD, "Cmd");
+	}
+
+	virtual bool GetMember(MQVarPtr VarPtr, const char* Member, char* Index, MQTypeVar& Dest) override {
+		auto pMember = MQ2MyButtonsType::FindMember(Member);
+		if (!pMember) return false;
+
+		// Validate the argument is between 1 and iMaxNumber
+		int i = GetIntFromString(Index , 0);
+		if (i > 0 && i <= KnightlyMyButtons::iMaxButtons) {
+			switch ((Members)pMember->ID) {
+				case Label:
+					strcpy_s(DataTypeTemp, KnightlyMyButtons::arrMyLabels[i]);
+					break;
+				case CMD:
+					strcpy_s(DataTypeTemp, KnightlyMyButtons::arrMyCommands[i]);
+					break;
+				default:
+					return false;
+			}
+		}
+		else {
+			strcpy_s(DataTypeTemp, "InvalidButton");
 		}
 
-		virtual bool GetMember(MQVarPtr VarPtr, const char* Member, char* Index, MQTypeVar& Dest) override {
-			_szBuffer[0] = '\0';
-
-			auto pMember = MQ2MyButtonsType::FindMember(Member);
-			if (!pMember) return false;
-
-			// Validate the argument is between 1 and iMaxNumber
-			int i = GetIntFromString(Index , 0);
-			if (i > 0 && i <= KnightlyMyButtons::iMaxButtons) {
-				switch ((Members)pMember->ID) {
-					case Label:
-						strcpy_s(_szBuffer, KnightlyMyButtons::arrMyLabels[i]);
-						break;
-					case CMD:
-						strcpy_s(_szBuffer, KnightlyMyButtons::arrMyCommands[i]);
-						break;
-					default:
-						return false;
-				}
-			}
-			else {
-				strcpy_s(_szBuffer, "InvalidButton");
-			}
-
-			Dest.Type = mq::datatypes::pStringType;
-			Dest.Ptr = &_szBuffer[0];
-			return true;
-		}
-
-		bool FromData(MQVarPtr& VarPtr, MQTypeVar& Source) { return false; }
-		virtual bool FromString(MQVarPtr& VarPtr, const char* Source) override { return false; }
+		Dest.Type = mq::datatypes::pStringType;
+		Dest.Ptr = &DataTypeTemp[0];
+		return true;
+	}
 };
 
 void ReadWindowINI(CSidlScreenWnd* pWindow)
@@ -1830,7 +1824,7 @@ void ReadWindowINI(CSidlScreenWnd* pWindow)
 	{
 		WriteChatf("Mybuttons is off screen.");
 	}
-	
+
 }
 
 void WriteWindowINI(CSidlScreenWnd* pWindow)
