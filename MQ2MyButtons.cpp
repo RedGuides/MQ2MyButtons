@@ -1667,7 +1667,7 @@ class CHButWnd : public CCustomWnd
 					strcpy_s(buffer, KnightlyMyButtons::arrMyLabels[iButton]);
 					// TODO:  Add a check for the button to see if it NEEDS to be parsed and only parse buttons that need updating
 					ParseMacroData(buffer, MAX_STRING);
-					button->SetWindowTextA(buffer);
+					button->SetWindowText(buffer);
 				}
 			}
 		}
